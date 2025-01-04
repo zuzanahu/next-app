@@ -2,6 +2,7 @@
 import { db } from "../db";
 import { usersTable } from "@/db/schema";
 import { eq } from 'drizzle-orm';
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default function Home() {
@@ -31,7 +32,10 @@ export default function Home() {
       const errorMessage = "You have a wrong pasword"
       console.log(errorMessage)
     } else {
-  
+      const cookieStore = await cookies()
+ 
+      cookieStore.set('signedIn', 'true', {httpOnly: true, secure:true})
+
       redirect('/stranka')
   
     }
@@ -42,8 +46,8 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         
       <form action={login}>
-        <input type="email" placeholder="Email" name="email"/>
-        <input type="password" placeholder="Password" name="password"/>
+        <input type="email" placeholder="Email" name="email" required/>
+        <input type="password" placeholder="Password" name="password" required/>
         <button type="submit">submit</button>
       </form>
       

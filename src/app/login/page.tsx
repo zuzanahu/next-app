@@ -3,7 +3,7 @@
 import { login } from "@/app/actions/auth";
 import { useActionState } from "react";
 
-export function LoginForm() {
+export default function LoginPage() {
 
     const [state, action, pending] = useActionState(login, undefined)
 
@@ -19,8 +19,7 @@ export function LoginForm() {
             <input id="password" name="password" type="password"/>
           </div>
           {state?.errors?.password && <p>{state.errors.password}</p>}
-          <button type="submit">Sign In</button>
-          {state?.errors && <p>{state.errors.password}</p>}
+          <button type="submit">{pending ? "Submitting..." : 'Sign In'}</button>
         </form>
       )
 }

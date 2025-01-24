@@ -57,9 +57,9 @@ async function addSessions() {
   if (user) {
     const session: Session = {
     //vyprsi 14:15
-    expires: new Date(Date.now() + 3600000*3),
+    expiresAt: new Date(Date.now() + 3600000*3),
     //id: 12
-    user: user.id,
+    userId: user.id,
     id: uuid(),
     };
     await db.insert(sessionsTable).values(session);

@@ -1,8 +1,13 @@
-'use client'
+import { db } from "@/db"
 
-export default function HomePage() {
-
+export default async function HomePage() {
+  const subjects = await db.query.subjectsTable.findMany()
     return (
-        <p>Welcome Home!</p>
-      )
+        //create a list of subjects
+      <ul>
+        {subjects.map((subject) =>  {
+          return <li key={subject.id}>{subject.name}</li>
+        })}
+      </ul>  
+    )
 }

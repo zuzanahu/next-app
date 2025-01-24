@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { int, mysqlTable, serial, varchar, longtext, datetime, boolean, bigint} from 'drizzle-orm/mysql-core';
 
 export const usersTable = mysqlTable('users_table', {
@@ -38,7 +38,7 @@ export const documentsTable = mysqlTable('documents_table', {
   ownerId: bigint("owner_id", { mode: 'number', unsigned: true }).notNull().references(() => usersTable.id),
   isFinal: boolean("is_final").notNull(),
   revisedAt: datetime("revised_at").notNull(),
-  createdAt: datetime("created_at").notNull(),
+  createdAt: datetime("created_at").notNull().default(sql`now()`),
 });
 
 export const documentsTableRelations = relations(documentsTable, ({one}) => (

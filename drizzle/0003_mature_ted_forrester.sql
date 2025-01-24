@@ -1,0 +1,1 @@
+ALTER TABLE `documents_table` MODIFY COLUMN `created_at` datetime NOT NULL DEFAULT now();

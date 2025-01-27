@@ -3,7 +3,7 @@
 import { startTransition } from "react";
 import { createDocument } from "../utils/createDocument";
 
-export default function CreateDocumentButton({
+export function CreateDocumentButton({
   subjectId,
 }: {
   subjectId: number;

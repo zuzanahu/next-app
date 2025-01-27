@@ -29,6 +29,10 @@ export const subjectsTable = mysqlTable('subjects_table', {
   name: varchar({ length: 255 }).notNull(),
 });
 
+export const subjectsTableRelations = relations(subjectsTable, ({ many }) => ({
+	documents: many(documentsTable),
+}));
+
 export type Subject = typeof subjectsTable.$inferInsert
 
 export const documentsTable = mysqlTable('documents_table', {

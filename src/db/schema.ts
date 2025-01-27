@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { int, mysqlTable, serial, varchar, longtext, datetime, boolean, bigint} from 'drizzle-orm/mysql-core';
+import { int, mysqlTable, serial, varchar, longtext, datetime, boolean, bigint, text} from 'drizzle-orm/mysql-core';
 
 export const usersTable = mysqlTable('users_table', {
   id: serial().primaryKey(),
@@ -37,7 +37,7 @@ export type Subject = typeof subjectsTable.$inferInsert
 
 export const documentsTable = mysqlTable('documents_table', {
   id: serial().primaryKey(),
-  content: varchar({ length: 255 }),
+  content: text(),
   subjectId: bigint("subject_id", { mode: 'number', unsigned: true }).notNull().references(() => subjectsTable.id),
   ownerId: bigint("owner_id", { mode: 'number', unsigned: true }).notNull().references(() => usersTable.id),
   isFinal: boolean("is_final").notNull(),

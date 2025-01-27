@@ -1,0 +1,1 @@
+ALTER TABLE `documents_table` MODIFY COLUMN `content` text;

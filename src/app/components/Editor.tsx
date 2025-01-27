@@ -1,57 +1,74 @@
 "use client";
-import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { useDebounceCallback } from "@/hooks/useDebounceCallback";
 import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
-import { useEffect, useMemo, useState } from "react";
+import { useCreateBlockNote } from "@blocknote/react";
+import { useState, useTransition } from "react";
 
-export function Editor() {
-  async function saveToStorage(jsonBlocks: Block[]) {
-    // Save contents to local storage. You might want to debounce this or replace
-    // with a call to your API / database.
-    localStorage.setItem("editorContent", JSON.stringify(jsonBlocks));
-  }
+interface EditorProps {
+  initialContent: string;
+  handleSave: (content: string) => Promise<void>;
+}
 
-  async function loadFromStorage() {
-    // Gets the previously stored editor contents.
-    const storageString = localStorage.getItem("editorContent");
-    return storageString
-      ? (JSON.parse(storageString) as PartialBlock[])
-      : undefined;
-  }
+const useAutoResetState = <T extends any>(options: {
+  timeout: number;
+  defaultValue?: T;
+}) => {
+  const [current, setCurrent] = useState<T | undefined>(options.defaultValue);
 
-  const [initialContent, setInitialContent] = useState<
-    PartialBlock[] | undefined | "loading"
-  >("loading");
+  const handleSetCurrent: typeof setCurrent = (nextValueOrFunction) => {
+    setCurrent(nextValueOrFunction);
 
-  // Loads the previously stored editor contents.
-  useEffect(() => {
-    loadFromStorage().then((content) => {
-      setInitialContent(content);
+    setTimeout(() => {
+      setCurrent(undefined);
+    }, options.timeout);
+  };
+
+  return [current, handleSetCurrent] as const;
+};
+
+export default function Editor({
+  initialContent,
+  handleSave: handleSave,
+}: EditorProps) {
+  const [showIsFinishedSaving, setShowIsFinishedSaving] = useAutoResetState({
+    timeout: 1000,
+    defaultValue: false,
+  });
+
+  // Use transition to have a way to tell user that there is a save going on
+  const [isUpdating, startUpdatingTransition] = useTransition();
+  const editor = useCreateBlockNote({
+    initialContent: initialContent ? JSON.parse(initialContent) : undefined,
+  });
+
+  // This can be called multiple times, however After 400ms delay it will execute
+  const debouncedSave = useDebounceCallback((valueToBeSaved: string) => {
+    // Call save server function with transition (so that we can tell user about it)
+    startUpdatingTransition(async () => {
+      await handleSave(valueToBeSaved);
+      setShowIsFinishedSaving(true);
     });
-  }, []);
+  }, 400);
 
-  // Creates a new editor instance.
-  // We use useMemo + createBlockNoteEditor instead of useCreateBlockNote so we
-  // can delay the creation of the editor until the initial content is loaded.
-  const editor = useMemo(() => {
-    if (initialContent === "loading") {
-      return undefined;
-    }
-    return BlockNoteEditor.create({ initialContent });
-  }, [initialContent]);
+  // This is called everytime user updates document (aka every keystroke)
+  const handleChange = () => {
+    debouncedSave(JSON.stringify(editor.document));
+  };
 
-  if (editor === undefined) {
-    return "Loading content...";
+  if (!editor) {
+    return <div>Loading editor...</div>;
   }
 
-  // Renders the editor instance.
   return (
-    <BlockNoteView
-      editor={editor}
-      onChange={() => {
-        saveToStorage(editor.document);
-      }}
-    />
+    <div>
+      {isUpdating
+        ? "Autosave in progress..."
+        : showIsFinishedSaving
+        ? "Save done!"
+        : null}
+      <BlockNoteView editor={editor} onChange={handleChange} />
+    </div>
   );
 }

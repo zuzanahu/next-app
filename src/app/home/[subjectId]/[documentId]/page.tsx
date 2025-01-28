@@ -1,4 +1,5 @@
 import Editor from "@/app/components/Editor";
+import { SetDocumentFinalButton } from "@/app/components/SetDocumentFinalButton";
 import { db } from "@/db";
 import { documentsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -27,6 +28,7 @@ export default async function Page({
     <>
       <h1>My Page {(await params).documentId} hsshs</h1>
       <Editor initialContent={content} handleSave={handleSave}></Editor>
+      <SetDocumentFinalButton documentId={documentId}></SetDocumentFinalButton>
     </>
   );
 }

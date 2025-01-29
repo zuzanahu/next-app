@@ -15,7 +15,7 @@ export default async function HomePage() {
               <li key={subject.id}>
                 {subject.name}
                 <CreateDocumentButton subjectId={subject.id} />
-                <Link href={"/home/" + subject.id}>Show all documents</Link>
+                <Link href={"/subjects/" + subject.id}>Show all documents</Link>
               </li>
             );
           })

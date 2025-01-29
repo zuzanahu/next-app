@@ -14,7 +14,6 @@ import {
 export const usersTable = mysqlTable("users_table", {
   id: serial().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
-  age: int().notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
   // Long text is due to long hashed password
   password: longtext().notNull(),
@@ -29,7 +28,7 @@ export const sessionsTable = mysqlTable("sessions_table", {
   // Foreign key
   userId: bigint("user_id", { mode: "number", unsigned: true })
     .notNull()
-    .references(() => usersTable.id),
+    .references(() => usersTable.id, { onDelete: "cascade" }),
 });
 
 export const sessionsTableRelations = relations(sessionsTable, ({ one }) => ({

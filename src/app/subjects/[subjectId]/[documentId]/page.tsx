@@ -42,9 +42,7 @@ export default async function Page({
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold my-5">
-        My Page {(await params).documentId} hsshs
-      </h1>
+      <h1 className="text-2xl font-semibold my-5">{document.title}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-5">
         <section className="border-b border-gray-400 pb-5">
           <h2 className="text-sm font-semibold">Informace o dokumentu</h2>

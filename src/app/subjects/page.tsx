@@ -4,11 +4,13 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import clsx from "clsx";
 import { DATE_FORMAT_NO_TIME } from "@/constans";
+import { getLoggedInUserOrRedirect } from "@/utils/getLoggedInUserOrRedirect";
 
 export default async function HomePage() {
   const subjects = await db.query.subjectsTable.findMany({
     with: { documents: true },
   });
+  const currentUser = await getLoggedInUserOrRedirect();
 
   return (
     <>
@@ -21,14 +23,16 @@ export default async function HomePage() {
             return (
               <li className="pb-5" key={subject.id}>
                 <h2 className="text-lg">{subject.name}</h2>
-                <div className="mt-1 text-sm flex flex-wrap gap-3 **:text-blue-800 **:cursor-pointer **:underline **:hover:no-underline">
-                  <CreateDocumentButton
-                    subjectId={subject.id}
-                    openAfterCreate
-                    text="Vytvořit nový prázdný dokument a otevřít"
-                    textCreating="Vytvářím prázdný dokument..."
-                  />
-                </div>
+                {currentUser.role?.canCreateDocuments ? (
+                  <div className="mt-1 text-sm flex flex-wrap gap-3 **:text-blue-800 **:cursor-pointer **:underline **:hover:no-underline">
+                    <CreateDocumentButton
+                      subjectId={subject.id}
+                      openAfterCreate
+                      text="Vytvořit nový prázdný dokument a otevřít"
+                      textCreating="Vytvářím prázdný dokument..."
+                    />
+                  </div>
+                ) : null}
                 <ul className="list-disc pl-5 mt-3">
                   {subject.documents.map((document) => (
                     <li key={document.id}>

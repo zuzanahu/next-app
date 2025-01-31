@@ -1,8 +1,8 @@
-import Editor from "@/app/components/Editor";
-import { SetDocumentFinalButton } from "@/app/components/SetDocumentFinalButton";
+import Editor from "@/components/Editor";
+import { SetDocumentFinalButton } from "@/components/SetDocumentFinalButton";
 import { DATE_FORMAT_WITH_TIME } from "@/constans";
 import { db } from "@/db";
-import { documentsTable, usersTable } from "@/db/schema";
+import { documentsTable } from "@/db/schema";
 import dayjs from "dayjs";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";

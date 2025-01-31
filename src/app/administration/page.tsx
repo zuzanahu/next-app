@@ -1,17 +1,16 @@
 import { db } from "@/db";
 import Link from "next/link";
-import RootLayout from "../layout";
-import { CreateSubjectForm } from "../components/CreateSubjectForm";
-import { DeleteSubjectButton } from "../components/DeleteSubjectButton";
-import { DeleteUserButton } from "../components/DeleteUserButton";
-import { CreateUserForm } from "../components/CreateUserForm";
+import { CreateSubjectForm } from "@/components/CreateSubjectForm";
+import { DeleteSubjectButton } from "@/components/DeleteSubjectButton";
+import { DeleteUserButton } from "@/components/DeleteUserButton";
+import { CreateUserForm } from "@/components/CreateUserForm";
 
 export default async function HomePage() {
   const subjects = await db.query.subjectsTable.findMany();
   const users = await db.query.usersTable.findMany();
 
   return (
-    <RootLayout>
+    <>
       <h2>Předměty</h2>
       <ul>
         {subjects ? (
@@ -45,6 +44,6 @@ export default async function HomePage() {
       </ul>
       <h3>Přidat uživatele</h3>
       <CreateUserForm></CreateUserForm>
-    </RootLayout>
+    </>
   );
 }

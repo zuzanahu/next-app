@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { CreateDocumentButton } from "../components/CreateDocumentButton";
+import { CreateDocumentButton } from "../../components/CreateDocumentButton";
 import Link from "next/link";
 import dayjs from "dayjs";
 import clsx from "clsx";

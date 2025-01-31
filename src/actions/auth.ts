@@ -1,11 +1,11 @@
 "use server";
 
-import { LoginFormSchema, LoginFormState } from "@/app/lib/definitions";
+import { LoginFormSchema, LoginFormState } from "@/lib/definitions";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { createSession, deleteSession } from "../lib/session";
+import { createSession, deleteSession } from "../../lib/session";
 
 export async function login(state: LoginFormState, formData: FormData) {
   // Validate form fields

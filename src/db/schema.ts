@@ -1,6 +1,5 @@
 import { relations, sql } from "drizzle-orm";
 import {
-  int,
   mysqlTable,
   serial,
   varchar,

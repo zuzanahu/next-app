@@ -1,0 +1,1 @@
+ALTER TABLE `users_roles` ADD `view_users` boolean DEFAULT false;

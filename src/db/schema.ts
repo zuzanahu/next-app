@@ -16,9 +16,30 @@ export const usersTable = mysqlTable("users_table", {
   email: varchar({ length: 255 }).notNull().unique(),
   // Long text is due to long hashed password
   password: longtext().notNull(),
+  roleId: bigint("role_id", { mode: "number", unsigned: true }).references(
+    () => userRoles.id,
+    { onDelete: "set null" }
+  ),
 });
 
-export type User = typeof usersTable.$inferInsert;
+export const usersTableRelations = relations(usersTable, ({ one }) => ({
+  role: one(userRoles, {
+    fields: [usersTable.roleId],
+    references: [userRoles.id],
+  }),
+}));
+
+export type User = typeof usersTable.$inferSelect;
+
+export const userRoles = mysqlTable("users_roles", {
+  id: serial().primaryKey(),
+  name: varchar({ length: 255 }).notNull(),
+  canDeleteDocuments: boolean("delete_documents").default(false),
+  canCreateDocuments: boolean("create_documents").default(false),
+  canViewUsers: boolean("view_users").default(false),
+});
+
+export type UserRole = typeof userRoles.$inferSelect;
 
 export const sessionsTable = mysqlTable("sessions_table", {
   // v4 uuid is varchar, but converting it to binary takes up less space

@@ -2,45 +2,48 @@
 
 import { LoginFormSchema, LoginFormState } from "@/lib/definitions";
 import { db } from "@/db";
-import { usersTable } from "@/db/schema";
+import { User, usersTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { createSession, deleteSession } from "../../lib/session";
+import { createSession, deleteSession } from "../lib/session";
 
 export async function login(state: LoginFormState, formData: FormData) {
+  let user: User | undefined;
   // Validate form fields
-  const validatedFields = LoginFormSchema.safeParse({
+  const validatedFields = await LoginFormSchema.superRefine(
+    async (data, { addIssue }) => {
+      user = await db.query.usersTable.findFirst({
+        where: eq(usersTable.email, data.email),
+      });
+
+      if (!user || user.password != data.password) {
+        addIssue({
+          path: ["email"],
+          message: "Špatné přihlašovací údaje",
+          code: "custom",
+        });
+        addIssue({
+          path: ["password"],
+          message: "Špatné přihlašovací údaje",
+          code: "custom",
+        });
+      }
+    }
+  ).safeParseAsync({
     email: formData.get("email"),
     password: formData.get("password"),
   });
 
   // If any form fields are invalid, return early
-  if (!validatedFields.success) {
+  if (!validatedFields.success || !user) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: validatedFields.error?.flatten().fieldErrors,
     };
   }
 
-  // Find the user by email
-  const user = await db.query.usersTable
-    .findFirst({
-      where: eq(usersTable.email, validatedFields.data.email),
-    })
-    .catch(() => {
-      return console.log("such user doesn't exist");
-    });
+  await createSession(user.id);
 
-  if (user != undefined) {
-    const password = user.password;
-
-    if (password != validatedFields.data.password) {
-      const errorMessage = "You have a wrong pasword or email";
-      console.log(errorMessage);
-    } else {
-      createSession(user.id);
-      redirect("/");
-    }
-  }
+  redirect("/");
 }
 
 export async function logout() {

@@ -3,6 +3,7 @@ import { SetDocumentFinalButton } from "@/app/components/SetDocumentFinalButton"
 import { db } from "@/db";
 import { documentsTable, usersTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
 
 export default async function Page({
   params,
@@ -14,6 +15,10 @@ export default async function Page({
   const document = await db.query.documentsTable.findFirst({
     where: (documentsTable, { eq }) => eq(documentsTable.id, documentId ?? ""),
   });
+
+  if (!document) {
+    throw notFound();
+  }
   const content = document?.content ?? "";
   const ownerId = document?.ownerId;
   // get the user's name
@@ -52,7 +57,11 @@ export default async function Page({
       </section>
 
       <Editor initialContent={content} handleSave={handleSave}></Editor>
-      <SetDocumentFinalButton documentId={documentId}></SetDocumentFinalButton>
+      {!document?.isFinal ? (
+        <SetDocumentFinalButton
+          documentId={documentId}
+        ></SetDocumentFinalButton>
+      ) : null}
     </>
   );
 }

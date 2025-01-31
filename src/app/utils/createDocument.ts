@@ -1,7 +1,8 @@
-"use server"
+"use server";
 import { db } from "@/db";
 import { documentsTable, sessionsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -14,6 +15,8 @@ export async function createDocument(subjectId: number) {
     revisedAt: new Date(),
     subjectId: subjectId,
   });
+
+  revalidatePath(`/subjects`);
 }
 
 /**

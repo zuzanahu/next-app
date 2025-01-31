@@ -2,8 +2,10 @@
 import { db } from "@/db";
 import { documentsTable } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function finalizeDocument(documentId: number) {
+  //todo check if exists
   // firstly, find the subject that the document with documenIt belongs to
   const documentToFinalize = await db.query.documentsTable.findFirst({
     where: eq(documentsTable.id, documentId),
@@ -31,4 +33,7 @@ export async function finalizeDocument(documentId: number) {
     .update(documentsTable)
     .set({ isFinal: true })
     .where(eq(documentsTable.id, documentId));
+  revalidatePath(
+    `/subjects/${documentToFinalize?.subjectId}/${documentToFinalize?.id}`
+  );
 }

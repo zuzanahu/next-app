@@ -43,8 +43,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav>
-          <ul className="flex m-1 rounded-lg shadow gap-2 p-2 bg-blue-300">
+        <nav className="container mt-2">
+          <ul className="flex rounded-lg shadow gap-2 p-2 bg-blue-300">
             {menuItems.map((item) => (
               <li className="px-3 py-1 bg-white rounded-lg" key={item.href}>
                 <Link href={item.href}>{item.label}</Link>

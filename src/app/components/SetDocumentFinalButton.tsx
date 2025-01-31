@@ -1,19 +1,31 @@
 "use client";
 
-import { startTransition } from "react";
-import { createDocument } from "../utils/createDocument";
+import { startTransition, useTransition } from "react";
 import { finalizeDocument } from "../utils/finalizeDocument";
 
-export function SetDocumentFinalButton({ documentId }: { documentId: number }) {
+export function SetDocumentFinalButton({
+  documentId,
+  text,
+  textWorking,
+  disabled,
+}: {
+  documentId: number;
+  text: string;
+  textWorking: string;
+  disabled?: boolean;
+}) {
+  const [isWorking, trackIsWorking] = useTransition();
   return (
     <button
+      disabled={disabled ?? isWorking}
+      className="px-4 py-1 bg-green-600 focus:ring-2 rounded-md text-sm text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
       onClick={() => {
-        startTransition(async () => {
+        trackIsWorking(async () => {
           await finalizeDocument(documentId);
         });
       }}
     >
-      Set document as final
+      {isWorking ? textWorking : text}
     </button>
   );
 }

@@ -6,17 +6,40 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function createDocument(subjectId: number) {
+export async function createDocument(
+  subjectId: number,
+  redirectUser?: boolean
+) {
   const userId = await getLoggedInUserId();
 
-  await db.insert(documentsTable).values({
-    isFinal: false,
-    ownerId: userId,
-    revisedAt: new Date(),
-    subjectId: subjectId,
+  const [{ id: newDocumentId }] = await db.transaction(async (ctx) => {
+    const createdResult = await ctx
+      .insert(documentsTable)
+      .values({
+        isFinal: false,
+        ownerId: userId,
+        revisedAt: new Date(),
+        subjectId: subjectId,
+        title: "",
+      })
+      .$returningId();
+
+    await ctx
+      .update(documentsTable)
+      .set({ title: `Nový prázdný dokument (${createdResult[0].id})` });
+
+    return createdResult;
+  });
+
+  const document = await db.query.documentsTable.findFirst({
+    where: eq(documentsTable.id, newDocumentId),
   });
 
   revalidatePath(`/subjects`);
+
+  if (redirectUser) {
+    throw redirect(`/subjects/${document?.subjectId}/${document?.id}`);
+  }
 }
 
 /**

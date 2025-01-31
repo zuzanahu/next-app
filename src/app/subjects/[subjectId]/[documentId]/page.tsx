@@ -1,7 +1,9 @@
 import Editor from "@/app/components/Editor";
 import { SetDocumentFinalButton } from "@/app/components/SetDocumentFinalButton";
+import { DATE_FORMAT_WITH_TIME } from "@/constans";
 import { db } from "@/db";
 import { documentsTable, usersTable } from "@/db/schema";
+import dayjs from "dayjs";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
@@ -14,6 +16,9 @@ export default async function Page({
   const documentId = (await params).documentId;
   const document = await db.query.documentsTable.findFirst({
     where: (documentsTable, { eq }) => eq(documentsTable.id, documentId ?? ""),
+    with: {
+      owner: true,
+    },
   });
 
   if (!document) {
@@ -23,14 +28,8 @@ export default async function Page({
   const ownerId = document?.ownerId;
   // get the user's name
   let name = "Neznámý uživatel";
-  if (ownerId) {
-    const user = await db.query.usersTable.findFirst({
-      where: eq(usersTable.id, ownerId),
-      columns: {
-        name: true,
-      },
-    });
-    name = user?.name ?? "Neznámý uživatel";
+  if (document.owner) {
+    name = document.owner.name;
   }
 
   async function handleSave(content: string) {
@@ -40,28 +39,41 @@ export default async function Page({
       .set({ content: content, revisedAt: new Date() })
       .where(eq(documentsTable.id, documentId));
   }
-  const time = document?.createdAt.toLocaleTimeString();
-  const date = document?.createdAt.toDateString();
-  const datetime = (date ?? "Neznámý datum") + " " + (time ?? "");
+
   return (
-    <>
-      <h1>My Page {(await params).documentId} hsshs</h1>
-      <section>
-        <h2>Informace o dokumentu</h2>
-        <ul>
-          <li>Jméno vlastníka: {name}</li>
-          <li>Datum vytvoření: {datetime}</li>
-          <li>Datum revize: {datetime}</li>
-          <li>Je dokument finalizovaný: {document?.isFinal ? "Ano" : "Ne"}</li>
-        </ul>
-      </section>
+    <div className="container">
+      <h1 className="text-2xl font-semibold my-5">
+        My Page {(await params).documentId} hsshs
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-5">
+        <section className="border-b border-gray-400 pb-5">
+          <h2 className="text-sm font-semibold">Informace o dokumentu</h2>
+          <ul className="list-disc pl-5 mt-2">
+            <li>Vlastník: {name}</li>
+            <li>
+              Vytvořeno:{" "}
+              {dayjs(document.createdAt).format(DATE_FORMAT_WITH_TIME)}
+            </li>
+            <li>
+              Revize: {dayjs(document.revisedAt).format(DATE_FORMAT_WITH_TIME)}
+            </li>
+            <li>Finalizovaný: {document?.isFinal ? "Ano" : "Ne"}</li>
+          </ul>
+        </section>
+        <section className="border-b border-gray-400 pb-5">
+          <h2 className="text-sm font-semibold">Nástroje</h2>
+          <div className="flex flex-wrap gap-4 mt-2">
+            <SetDocumentFinalButton
+              documentId={documentId}
+              text="Označit jako finalizované"
+              textWorking="Ukládám..."
+              disabled={document.isFinal ? true : undefined}
+            />
+          </div>
+        </section>
+      </div>
 
       <Editor initialContent={content} handleSave={handleSave}></Editor>
-      {!document?.isFinal ? (
-        <SetDocumentFinalButton
-          documentId={documentId}
-        ></SetDocumentFinalButton>
-      ) : null}
-    </>
+    </div>
   );
 }

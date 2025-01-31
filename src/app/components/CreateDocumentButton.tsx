@@ -1,22 +1,30 @@
 "use client";
 
-import { startTransition } from "react";
+import { PropsWithChildren, startTransition, useTransition } from "react";
 import { createDocument } from "../utils/createDocument";
 
 export function CreateDocumentButton({
   subjectId,
+  openAfterCreate,
+  text,
+  textCreating,
 }: {
   subjectId: number;
+  openAfterCreate?: boolean;
+  text: string;
+  textCreating: string;
 }) {
+  const [isCreating, trackIsCreating] = useTransition();
+
   return (
     <button
       onClick={() => {
-        startTransition(async () => {
-          await createDocument(subjectId);
+        trackIsCreating(async () => {
+          await createDocument(subjectId, openAfterCreate);
         });
       }}
     >
-      Create new document
+      {isCreating ? textCreating : text}
     </button>
   );
 }

@@ -53,6 +53,7 @@ export type Subject = typeof subjectsTable.$inferInsert;
 
 export const documentsTable = mysqlTable("documents_table", {
   id: serial().primaryKey(),
+  title: text().notNull(),
   content: text(),
   subjectId: bigint("subject_id", { mode: "number", unsigned: true })
     .notNull()

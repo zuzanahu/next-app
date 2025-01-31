@@ -68,7 +68,11 @@ export default function Editor({
         : showIsFinishedSaving
         ? "Save done!"
         : null}
-      <BlockNoteView editor={editor} onChange={handleChange} />
+      <BlockNoteView
+        className="*:py-5"
+        editor={editor}
+        onChange={handleChange}
+      />
     </div>
   );
 }

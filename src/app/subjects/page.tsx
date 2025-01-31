@@ -3,6 +3,7 @@ import { CreateDocumentButton } from "../components/CreateDocumentButton";
 import Link from "next/link";
 import dayjs from "dayjs";
 import clsx from "clsx";
+import { DATE_FORMAT_NO_TIME } from "@/constans";
 
 export default async function HomePage() {
   const subjects = await db.query.subjectsTable.findMany({
@@ -21,21 +22,29 @@ export default async function HomePage() {
               <li className="pb-5" key={subject.id}>
                 <h2 className="text-lg">{subject.name}</h2>
                 <div className="mt-1 text-sm flex flex-wrap gap-3 **:text-blue-800 **:cursor-pointer **:underline **:hover:no-underline">
-                  <CreateDocumentButton subjectId={subject.id} />
+                  <CreateDocumentButton
+                    subjectId={subject.id}
+                    openAfterCreate
+                    text="Vytvořit nový prázdný dokument a otevřít"
+                    textCreating="Vytvářím prázdný dokument..."
+                  />
                 </div>
                 <ul className="list-disc pl-5 mt-3">
                   {subject.documents.map((document) => (
                     <li key={document.id}>
                       <Link
                         className={clsx(
-                          "hover:underline",
+                          "hover:underline block",
                           document.isFinal && "text-green-600"
                         )}
                         href={`/subjects/${subject.id}/${document.id}`}
                       >
-                        Dokument vytvořený dne:{" "}
-                        {dayjs(document.createdAt).format("DD.MM.YYYY")}
+                        {document.title}
                       </Link>
+                      <small>
+                        ({dayjs(document.createdAt).format(DATE_FORMAT_NO_TIME)}
+                        )
+                      </small>
                     </li>
                   ))}
                 </ul>

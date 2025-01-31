@@ -64,6 +64,13 @@
       "when": 1738149450680,
       "tag": "0008_large_hammerhead",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1738352931004,
+      "tag": "0009_nice_vermin",
+      "breakpoints": true
     }
   ]
 }

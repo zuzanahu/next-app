@@ -58,7 +58,7 @@ export const sessionsTableRelations = relations(sessionsTable, ({ one }) => ({
   }),
 }));
 
-export type Session = typeof sessionsTable.$inferInsert;
+export type Session = typeof sessionsTable.$inferSelect;
 
 export const subjectsTable = mysqlTable("subjects_table", {
   id: serial().primaryKey(),
@@ -69,7 +69,7 @@ export const subjectsTableRelations = relations(subjectsTable, ({ many }) => ({
   documents: many(documentsTable),
 }));
 
-export type Subject = typeof subjectsTable.$inferInsert;
+export type Subject = typeof subjectsTable.$inferSelect;
 
 export const documentsTable = mysqlTable("documents_table", {
   id: serial().primaryKey(),
@@ -100,4 +100,4 @@ export const documentsTableRelations = relations(documentsTable, ({ one }) => ({
   }),
 }));
 
-export type Document = typeof documentsTable.$inferInsert;
+export type Document = typeof documentsTable.$inferSelect;

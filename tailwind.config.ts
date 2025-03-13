@@ -8,5 +8,5 @@ export default {
   ],
   plugins: [],
   darkMode: false,
-  theme: { container: { padding: "0.5rem", center: true } },
+  theme: { container: { center: true } },
 } satisfies Config;

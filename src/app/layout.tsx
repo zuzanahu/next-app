@@ -1,5 +1,15 @@
+import "@mantine/tiptap/styles.css";
+import "@mantine/core/styles.css";
+import {
+  AppShell,
+  AppShellHeader,
+  AppShellMain,
+  ColorSchemeScript,
+  MantineProvider,
+  mantineHtmlProps,
+} from "@mantine/core";
+
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Link from "next/link";
 import cslocale from "dayjs/locale/cs";
@@ -7,16 +17,6 @@ import dayjs from "dayjs";
 import { getLoggedInUser } from "@/utils/getLoggedInUser";
 
 dayjs.locale(cslocale);
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,7 +30,7 @@ export default async function RootLayout({
 }>) {
   const menuItems = [
     {
-      href: "/subjects",
+      href: "/predmety",
       label: "Předměty",
     },
   ];
@@ -45,20 +45,29 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className="text-gray-800">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <nav className="container mt-2">
-          <ul className="flex rounded-lg shadow gap-2 p-2 bg-blue-300">
-            {menuItems.map((item) => (
-              <li className="px-3 py-1 bg-white rounded-lg" key={item.href}>
-                <Link href={item.href}>{item.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        {children}
+    <html lang="en" {...mantineHtmlProps}>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body>
+        <MantineProvider>
+          <AppShell header={{ height: 60 }} padding="md">
+            <AppShellHeader className="container rounded-lg shadow flex justify-end">
+              <ul className="flex gap-2 p-2 items-center">
+                {menuItems.map((item) => (
+                  <li
+                    className="px-3 py-1 bg-white rounded-lg flex"
+                    key={item.href}
+                  >
+                    <Link href={item.href}>{item.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </AppShellHeader>
+
+            <AppShellMain>{children}</AppShellMain>
+          </AppShell>
+        </MantineProvider>
       </body>
     </html>
   );

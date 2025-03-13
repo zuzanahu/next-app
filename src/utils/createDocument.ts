@@ -35,10 +35,10 @@ export async function createDocument(
     where: eq(documentsTable.id, newDocumentId),
   });
 
-  revalidatePath(`/subjects`);
+  revalidatePath(`/predmety`);
 
   if (redirectUser) {
-    throw redirect(`/subjects/${document?.subjectId}/${document?.id}`);
+    throw redirect(`/predmety/${document?.subjectId}/${document?.id}`);
   }
 }
 

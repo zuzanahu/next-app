@@ -34,6 +34,6 @@ export async function finalizeDocument(documentId: number) {
     .set({ isFinal: true })
     .where(eq(documentsTable.id, documentId));
   revalidatePath(
-    `/subjects/${documentToFinalize?.subjectId}/${documentToFinalize?.id}`
+    `/predmety/${documentToFinalize?.subjectId}/${documentToFinalize?.id}`
   );
 }

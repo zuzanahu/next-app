@@ -24,7 +24,7 @@ export default async function Page({
           const date = document.createdAt.toDateString();
           return (
             <li key={document.id}>
-              <Link href={"/subjects/" + subjectId + "/" + document.id}>
+              <Link href={"/predmety/" + subjectId + "/" + document.id}>
                 {date + " " + time}
               </Link>
             </li>

@@ -43,7 +43,7 @@ export async function login(state: LoginFormState, formData: FormData) {
 
   await createSession(user.id);
 
-  redirect("/");
+  redirect("/predmety");
 }
 
 export async function logout() {

@@ -43,8 +43,10 @@ export default async function Page({
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold my-5">{document.title}</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-5">
-        <section className="border-b border-gray-400 pb-5">
+      {/* Document information and actions */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-12">
+        {/* Document information */}
+        <section>
           <h2 className="text-sm font-semibold">Informace o dokumentu</h2>
           <ul className="list-disc pl-5 mt-2">
             <li>Vlastník: {name}</li>
@@ -58,7 +60,8 @@ export default async function Page({
             <li>Finalizovaný: {document?.isFinal ? "Ano" : "Ne"}</li>
           </ul>
         </section>
-        <section className="border-b border-gray-400 pb-5">
+        {/* Document actions */}
+        <section>
           <h2 className="text-sm font-semibold">Nástroje</h2>
           <div className="flex flex-wrap gap-4 mt-2">
             <SetDocumentFinalButton
@@ -69,8 +72,8 @@ export default async function Page({
             />
           </div>
         </section>
-      </div>
-
+      </section>
+      {/* Document content editor */}
       <Editor initialContent={content} handleSave={handleSave}></Editor>
     </div>
   );

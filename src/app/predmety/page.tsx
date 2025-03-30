@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { getLoggedInUserOrRedirect } from "@/utils/getLoggedInUserOrRedirect";
 import { CreateListOfSubjects } from "@/components/CreateListOfSubjects";
+import { FinalizedDocuments } from "@/components/FinalizedDocuments";
 
 export default async function HomePage() {
   const subjects = await db.query.subjectsTable.findMany({
@@ -14,6 +15,7 @@ export default async function HomePage() {
       <div className="container">
         <h1 className="mt-10 mb-5 text-2xl font-semibold">Předměty</h1>
       </div>
+      <FinalizedDocuments></FinalizedDocuments>
       <CreateListOfSubjects
         canCreateDocuments={canCreateDocuments}
         subjects={subjects}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { getAllFinalizedDocuments } from "@/utils/getAllFinalizedDocuments";
+import { jsonToLatex } from "@/utils/jsonToLatex";
 
 export function FinalizedDocuments() {
   const [missingSubjects, setMissingSubjects] = useState<string[]>([]);
@@ -31,13 +32,24 @@ export function FinalizedDocuments() {
     let latexContent = `
       \\documentclass{article}
       \\usepackage{graphicx}
+      \\usepackage{amsmath} % For math equations
       \\begin{document}
     `;
 
     documents.forEach(({ subject, content }) => {
+      let formattedContent = "";
+
+      try {
+        const parsedContent = JSON.parse(content);
+        formattedContent = jsonToLatex(parsedContent);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        formattedContent = "\\textbf{Error: Could not parse document.}";
+      }
+
       latexContent += `
         \\section*{${subject}}
-        ${content.replace(/\n/g, "\n\n")} % Proper formatting
+        ${formattedContent}
       `;
     });
 

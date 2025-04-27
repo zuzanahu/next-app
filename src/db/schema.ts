@@ -36,7 +36,7 @@ export const userRoles = mysqlTable("users_roles", {
   name: varchar({ length: 255 }).notNull(),
   canDeleteDocuments: boolean("delete_documents").default(false),
   canCreateDocuments: boolean("create_documents").default(false),
-  canViewUsers: boolean("view_users").default(false),
+  canViewAdministration: boolean("view_administration").default(false),
 });
 
 export type UserRole = typeof userRoles.$inferSelect;

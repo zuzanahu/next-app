@@ -37,7 +37,7 @@ export default async function RootLayout({
 
   const loggedInUser = await getLoggedInUser();
 
-  if (loggedInUser?.role?.canViewUsers) {
+  if (loggedInUser?.role?.canViewAdministration) {
     menuItems.push({
       href: "/uzivatele",
       label: "Uživatelé",

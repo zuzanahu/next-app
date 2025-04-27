@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+//todo typy
 export const jsonToLatex = (json: any): string => {
   if (!json || !json.content) return "";
 

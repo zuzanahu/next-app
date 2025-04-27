@@ -43,8 +43,17 @@ const processNode = (node: any): string => {
     case "table":
       return processTable(node);
     case "heading":
-      switch (node.attrs.level) {
+      const { level } = node.attrs;
+
+      switch (level) {
         case 1:
+          return `\\section{${processInlineNodes(node.content)}}`;
+        case 2:
+          return `\\subsection{${processInlineNodes(node.content)}}`;
+        case 3:
+          return `\\subsubsection{${processInlineNodes(node.content)}}`;
+        default:
+          return `Invalid Heading "${processInlineNodes(node.content)}"`;
       }
     default:
       console.warn(`Unhandled node type: ${node.type}`);

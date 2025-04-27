@@ -1,6 +1,6 @@
 "use client";
 
-import { createSubjectAction } from "@/actions/createSubjectAction";
+import { createSubjectAction } from "@/server-actions/createSubjectAction";
 import { useActionState } from "react";
 
 export type CreateSubjectFormState = {

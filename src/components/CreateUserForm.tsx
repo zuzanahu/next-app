@@ -1,5 +1,5 @@
 "use client";
-import { createUserAction } from "@/actions/createUserAction";
+import { createUserAction } from "@/server-actions/createUserAction";
 import { useActionState } from "react";
 
 export type CreateUserFormState = {

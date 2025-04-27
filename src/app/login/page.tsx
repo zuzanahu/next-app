@@ -1,6 +1,6 @@
 "use client";
 
-import { doLoginAction } from "@/actions/doLoginAction";
+import { doLoginAction } from "@/server-actions/doLoginAction";
 import { useActionState } from "react";
 
 export type LoginFormState = {

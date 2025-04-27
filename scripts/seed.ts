@@ -15,7 +15,14 @@ const [adminRole] = await db.insert(schema.userRoles).values({
   name: "Admin",
   canCreateDocuments: true,
   canDeleteDocuments: true,
-  canViewUsers: true,
+  canViewAdministration: true,
+});
+
+const [userRole] = await db.insert(schema.userRoles).values({
+  name: "User",
+  canCreateDocuments: true,
+  canDeleteDocuments: true,
+  canViewAdministration: false,
 });
 
 await db
@@ -34,17 +41,31 @@ await db
     { name: "Japonský jazyk" },
     { name: "Matematika" },
   ]);
+
 console.log("Subjects created!");
 
 const subjects = await db.query.subjectsTable.findMany();
 const subjectIds = subjects.map((subject) => subject.id);
 
-const [adminUser] = await db.insert(schema.usersTable).values({
+const users = await db.query.usersTable.findMany();
+const userIds = users.map((document) => document.id);
+
+await db.insert(schema.usersTable).values({
   name: "John",
   roleId: adminRole.insertId,
-  email: "test@gmail.com",
+  email: "admin@gmail.com",
   password: "test123",
 });
+
+console.log("New admin created!");
+
+await db.insert(schema.usersTable).values({
+  name: "Alice Nováková",
+  roleId: userRole.insertId,
+  email: "user@gmail.com",
+  password: "test321",
+});
+
 console.log("New user created!");
 
 const documentsToCreate = await glob("*.json", {
@@ -63,8 +84,8 @@ await Promise.all(
       isFinal: true,
       revisedAt: new Date(),
       createdAt: new Date(),
-      subjectId: subjectIds[getRandomNumber(subjectIds.length - 1)],
-      ownerId: adminUser.insertId,
+      subjectId: subjectIds.at(getRandomNumber(subjectIds.length - 1)),
+      ownerId: userIds.at(getRandomNumber(userIds.length - 1)),
       title: `Neznámý dokument (${index})`,
       ...document,
     });

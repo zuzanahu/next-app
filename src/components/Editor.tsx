@@ -63,7 +63,7 @@ export default function Editor({ initialContent, handleSave }: EditorProps) {
       await handleSave(valueToBeSaved);
       setShowIsFinishedSaving(true);
     });
-  }, 400);
+  }, 2000);
 
   const editor = useEditor({
     extensions: [

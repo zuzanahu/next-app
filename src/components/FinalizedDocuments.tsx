@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { getAllFinalizedDocuments } from "@/utils/getAllFinalizedDocuments";
+import { getAllFinalizedDocuments } from "@/server-functions/getAllFinalizedDocuments";
 import { jsonToLatex } from "@/utils/jsonToLatex";
 
 export function FinalizedDocuments() {
@@ -29,10 +29,14 @@ export function FinalizedDocuments() {
   const generateAndDownloadLatex = (
     documents: { subject: string; content: string }[]
   ) => {
+    // float so that the table stays at the place, that i have defined it at
     let latexContent = `
       \\documentclass{article}
       \\usepackage{graphicx}
       \\usepackage{amsmath} % For math equations
+      \\usepackage{tabularx}
+      \\usepackage{multirow}
+      \\usepackage{float}
       \\begin{document}
     `;
 
@@ -81,7 +85,7 @@ export function FinalizedDocuments() {
             <ul>
               {missingSubjects.map((subject) => (
                 <li key={subject} className="list-disc ml-4">
-                  Předmět "{subject}" nemá finalizovaný dokument.
+                  `Předmět ${subject} nemá finalizovaný dokument.`
                 </li>
               ))}
             </ul>
@@ -95,8 +99,8 @@ export function FinalizedDocuments() {
             <ul>
               {missingContentSubjects.map((subject) => (
                 <li key={subject} className="list-disc ml-4">
-                  Předmět "{subject}" má finalizovaný dokument, ale neobsahuje
-                  žádný obsah.
+                  `Předmět ${subject} má finalizovaný dokument, ale neobsahuje
+                  žádný obsah.`
                 </li>
               ))}
             </ul>

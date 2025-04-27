@@ -10,10 +10,10 @@ import { notFound } from "next/navigation";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ documentId: number }>;
+  params: Promise<{ dokumentId: number }>;
 }) {
   // fetch content from db
-  const documentId = (await params).documentId;
+  const documentId = (await params).dokumentId;
   const document = await db.query.documentsTable.findFirst({
     where: (documentsTable, { eq }) => eq(documentsTable.id, documentId ?? ""),
     with: {
@@ -25,7 +25,7 @@ export default async function Page({
     throw notFound();
   }
   const content = document?.content ?? "";
-  const ownerId = document?.ownerId;
+  // const ownerId = document?.ownerId;
   // get the user's name
   let name = "Neznámý uživatel";
   if (document.owner) {

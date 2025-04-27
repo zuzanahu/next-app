@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/db";
-import { documentsTable, Subject, subjectsTable } from "@/db/schema";
+import { documentsTable, type Subject } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 
 export const getAllFinalizedDocuments = async () => {

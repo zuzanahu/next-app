@@ -5,12 +5,13 @@ import { CreateDocumentButton } from "./CreateDocumentButton";
 import Link from "next/link";
 import dayjs from "dayjs";
 import clsx from "clsx";
-import type { Document, Subject } from "@/db/schema";
 import { DATE_FORMAT_NO_TIME } from "@/constans";
+
+import type { Document, Subject } from "@/db/schema";
 
 type SubjectWithDocuments = Subject & { documents: Document[] };
 
-export function CreateListOfSubjects({
+export function ListOfSubjects({
   subjects,
   canCreateDocuments,
 }: {

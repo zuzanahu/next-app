@@ -1,17 +1,15 @@
 "use server";
+import type { CreateSubjectFormState } from "@/components/CreateSubjectForm";
 import { db } from "@/db";
-import {
-  CreateSubjectFormSchema,
-  CreateSubjectFormState,
-} from "../lib/definitions";
 import { subjectsTable } from "@/db/schema";
+import { createSubjectFormSchema } from "@/schemas/createSubjectFormSchema";
 
-export async function createSubject(
-  state: CreateSubjectFormState,
+export async function createSubjectAction(
+  previouState: CreateSubjectFormState | undefined,
   formData: FormData
 ) {
   // Validate form fields
-  const validatedFields = CreateSubjectFormSchema.safeParse({
+  const validatedFields = createSubjectFormSchema.safeParse({
     name: formData.get("name"),
   });
 

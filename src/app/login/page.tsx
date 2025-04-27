@@ -1,10 +1,18 @@
 "use client";
 
-import { login } from "@/actions/auth";
+import { doLoginAction } from "@/actions/doLoginAction";
 import { useActionState } from "react";
 
+export type LoginFormState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+  };
+  message?: string;
+};
+
 export default function LoginPage() {
-  const [state, action, pending] = useActionState(login, undefined);
+  const [state, action, pending] = useActionState(doLoginAction, undefined);
 
   return (
     <form className="container text-xl mt-10" action={action}>

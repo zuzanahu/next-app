@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition } from "react";
-import { deleteUser } from "../utils/deleteUser";
+import { deleteUser } from "../server-functions/deleteUser";
 
 export function DeleteUserButton({ userId }: { userId: number }) {
   return (

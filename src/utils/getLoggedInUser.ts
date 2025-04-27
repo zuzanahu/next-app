@@ -1,7 +1,7 @@
-import { getUserSession } from "@/lib/session";
+import { getUserFromSession } from "./getUserFromSession";
 
 export const getLoggedInUser = async () => {
-  const session = await getUserSession();
+  const session = await getUserFromSession();
 
   return session?.user;
 };

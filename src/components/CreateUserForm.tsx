@@ -1,9 +1,18 @@
 "use client";
+import { createUserAction } from "@/actions/createUserAction";
 import { useActionState } from "react";
-import { createUser } from "../utils/createUser";
+
+export type CreateUserFormState = {
+  errors?: {
+    name?: string[];
+    email?: string[];
+    password?: string[];
+  };
+  message?: string;
+};
 
 export function CreateUserForm() {
-  const [state, action, pending] = useActionState(createUser, undefined);
+  const [state, action, pending] = useActionState(createUserAction, undefined);
 
   return (
     <form action={action}>

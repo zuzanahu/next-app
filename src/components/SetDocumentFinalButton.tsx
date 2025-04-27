@@ -1,7 +1,7 @@
 "use client";
 
-import { startTransition, useTransition } from "react";
-import { finalizeDocument } from "../utils/finalizeDocument";
+import { useTransition } from "react";
+import { finalizeDocument } from "../server-functions/finalizeDocument";
 
 export function SetDocumentFinalButton({
   documentId,

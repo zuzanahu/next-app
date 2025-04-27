@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { getLoggedInUserOrRedirect } from "@/utils/getLoggedInUserOrRedirect";
-import { CreateListOfSubjects } from "@/components/CreateListOfSubjects";
+import { ListOfSubjects } from "@/components/ListOfSubjects";
 import { FinalizedDocuments } from "@/components/FinalizedDocuments";
 
 export default async function HomePage() {
@@ -16,10 +16,10 @@ export default async function HomePage() {
         <h1 className="mt-10 mb-5 text-2xl font-semibold">Předměty</h1>
       </div>
       <FinalizedDocuments></FinalizedDocuments>
-      <CreateListOfSubjects
+      <ListOfSubjects
         canCreateDocuments={canCreateDocuments}
         subjects={subjects}
-      ></CreateListOfSubjects>
+      ></ListOfSubjects>
     </>
   );
 }

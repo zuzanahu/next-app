@@ -4,9 +4,9 @@ import Link from "next/link";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ subjectId: number }>;
+  params: Promise<{ predmetId: number }>;
 }) {
-  const subjectId = (await params).subjectId;
+  const subjectId = (await params).predmetId;
   console.log(await params);
   console.log(subjectId);
   const subject = await db.query.subjectsTable.findFirst({

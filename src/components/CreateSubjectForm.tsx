@@ -1,10 +1,20 @@
 "use client";
 
+import { createSubjectAction } from "@/actions/createSubjectAction";
 import { useActionState } from "react";
-import { createSubject } from "../utils/createSubject";
+
+export type CreateSubjectFormState = {
+  errors?: {
+    name?: string[];
+  };
+  message?: string;
+};
 
 export function CreateSubjectForm() {
-  const [state, action, pending] = useActionState(createSubject, undefined);
+  const [state, action, pending] = useActionState(
+    createSubjectAction,
+    undefined
+  );
 
   return (
     <form action={action}>

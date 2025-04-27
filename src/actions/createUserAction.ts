@@ -1,14 +1,15 @@
 "use server";
+import type { CreateUserFormState } from "@/components/CreateUserForm";
 import { db } from "@/db";
-import { CreateUserFormSchema, CreateUserFormState } from "../lib/definitions";
 import { usersTable } from "@/db/schema";
+import { createUserFormSchema } from "@/schemas/createUserFormSchema";
 
-export async function createUser(
-  state: CreateUserFormState,
+export async function createUserAction(
+  previousState: CreateUserFormState | undefined,
   formData: FormData
 ) {
   // Validate form fields
-  const validatedFields = CreateUserFormSchema.safeParse({
+  const validatedFields = createUserFormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),

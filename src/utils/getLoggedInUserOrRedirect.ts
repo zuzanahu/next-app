@@ -1,4 +1,3 @@
-import { getUserSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { getLoggedInUser } from "./getLoggedInUser";
 

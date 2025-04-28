@@ -39,8 +39,15 @@ export default async function RootLayout({
 
   if (loggedInUser?.role?.canViewAdministration) {
     menuItems.push({
-      href: "/uzivatele",
-      label: "Uživatelé",
+      href: "/administrace",
+      label: "Administrace",
+    });
+  }
+
+  if (loggedInUser) {
+    menuItems.push({
+      href: "/logout",
+      label: "Odhlásit se",
     });
   }
 

@@ -17,11 +17,20 @@ export async function middleware(request: NextRequest) {
   }
 
   if (nextUrl.pathname.startsWith("/administrace")) {
-    const user = await getUserFromSession();
+    const session = await getUserFromSession();
 
     // If user is not logged in and reaches for administrace page then redirect him
-    if (!user) {
+    if (!session) {
       return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    if (session.user.role?.canViewAdministration === true) {
+      return NextResponse.redirect(new URL("/administrace", request.url));
+    }
+
+    //if user wants to go to administration and is logged in, but doensn't have the necessary permissions, redirect to predmety
+    else {
+      return NextResponse.redirect(new URL("/predmety", request.url));
     }
   }
 }

@@ -69,7 +69,7 @@ export function FinalizedDocuments() {
   return (
     <>
       <button onClick={handleClick}>
-        Získat všechny finalizované dokumenty
+        Získat všechny dokumenty s finální verzí
       </button>
       <Modal
         opened={opened}
@@ -80,12 +80,12 @@ export function FinalizedDocuments() {
         {missingSubjects.length > 0 && (
           <>
             <p className="mb-5 text-red-500">
-              Některé předměty nemají finalizovaný dokument:
+              Některé předměty nemají dokument s finální verzí:
             </p>
             <ul>
               {missingSubjects.map((subject) => (
                 <li key={subject} className="list-disc ml-4">
-                  `Předmět ${subject} nemá finalizovaný dokument.`
+                  `Předmět ${subject} nemá dokument s finální verzí.`
                 </li>
               ))}
             </ul>

@@ -1,5 +1,5 @@
 import Editor from "@/components/Editor";
-import { SetDocumentFinalButton } from "@/components/SetDocumentFinalButton";
+import { FinalizeDocumentButton } from "@/components/FinalizeDocumentButton";
 import { DATE_FORMAT_WITH_TIME } from "@/constans";
 import { db } from "@/db";
 import { documentsTable } from "@/db/schema";
@@ -57,16 +57,16 @@ export default async function Page({
             <li>
               Revize: {dayjs(document.revisedAt).format(DATE_FORMAT_WITH_TIME)}
             </li>
-            <li>Finalizovaný: {document?.isFinal ? "Ano" : "Ne"}</li>
+            <li>Finální verze: {document?.isFinal ? "Ano" : "Ne"}</li>
           </ul>
         </section>
         {/* Document actions */}
         <section>
           <h2 className="text-sm font-semibold">Nástroje</h2>
           <div className="flex flex-wrap gap-4 mt-2">
-            <SetDocumentFinalButton
+            <FinalizeDocumentButton
               documentId={documentId}
-              text="Označit jako finalizované"
+              text="Označit jako finální verzi"
               textWorking="Ukládám..."
               disabled={document.isFinal ? true : undefined}
             />

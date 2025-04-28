@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { finalizeDocument } from "../server-functions/finalizeDocument";
 
-export function SetDocumentFinalButton({
+export function FinalizeDocumentButton({
   documentId,
   text,
   textWorking,

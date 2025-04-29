@@ -39,6 +39,7 @@ export default async function RootLayout({
     href: string;
     label: string;
     color?: ButtonProps["color"];
+    prefetch?: boolean;
   }> = [];
 
   const loggedInUser = await getLoggedInUser();
@@ -65,6 +66,7 @@ export default async function RootLayout({
       href: "/logout",
       label: "Odhlásit se",
       color: "red",
+      prefetch: false,
     });
   }
 
@@ -90,6 +92,7 @@ export default async function RootLayout({
                       variant="subtle"
                       size="xs"
                       component={Link}
+                      prefetch={item.prefetch}
                       href={item.href}
                       color={item.color}
                     >

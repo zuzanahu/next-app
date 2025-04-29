@@ -24,12 +24,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    if (session.user.role?.canViewAdministration === true) {
-      return NextResponse.redirect(new URL("/administrace", request.url));
-    }
-
     //if user wants to go to administration and is logged in, but doensn't have the necessary permissions, redirect to predmety
-    else {
+    if (session.user.role?.canViewAdministration === false) {
       return NextResponse.redirect(new URL("/predmety", request.url));
     }
   }

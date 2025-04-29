@@ -1,3 +1,6 @@
+import { db } from "@/db";
+import { userRoles, usersTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const createUserFormSchema = z.object({
@@ -5,7 +8,24 @@ export const createUserFormSchema = z.object({
     .string()
     .min(2, { message: "Name must be at least 2 characters long." })
     .trim(),
-  email: z.string().email({ message: "Please enter a valid email." }).trim(),
+  email: z
+    .string()
+    .trim()
+    .email({ message: "Please enter a valid email." })
+    .refine(async (input) => {
+      const role = await db.query.usersTable.findFirst({
+        where: eq(usersTable.email, input),
+      });
+
+      return !role;
+    }, "Uživatel pod tímto emailem již existuje"),
+  roleId: z.coerce.number().refine(async (input) => {
+    const role = await db.query.userRoles.findFirst({
+      where: eq(userRoles.id, input),
+    });
+
+    return !!role;
+  }, "Vybraná role neexistuje"),
   password: z
     .string()
     .min(8, { message: "Be at least 8 characters long" })

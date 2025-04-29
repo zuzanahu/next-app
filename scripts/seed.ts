@@ -6,6 +6,7 @@ import { glob } from "glob";
 import { reset } from "drizzle-seed";
 import path from "path";
 import { hashPassword } from "@/utils/hashPassword";
+import { assertDefined } from "@/utils/assertDefined";
 await reset(db, schema);
 
 function getRandomNumber(max: number) {
@@ -31,16 +32,13 @@ await db
   .values([
     { name: "Český jazyk" },
     { name: "Anglický jazyk" },
-    { name: "Anglický jazyk 2" },
     { name: "Francouzský jazyk" },
     { name: "Fyzika" },
     { name: "Biologie" },
     { name: "Chemie" },
-    { name: "Dějepis" },
     { name: "Zeměpis" },
     { name: "Tělesná výchova" },
     { name: "Japonský jazyk" },
-    { name: "Matematika" },
   ]);
 
 console.log("Subjects created!");
@@ -75,18 +73,42 @@ const documentsToCreate = await glob("*.json", {
   absolute: true,
 });
 
+const pickedSubjectIds = new Set<(typeof subjectIds)[number]>();
+
+const getRandomSubjectId = () => {
+  const subjectId = assertDefined(
+    subjectIds.at(getRandomNumber(subjectIds.length))
+  );
+
+  if (pickedSubjectIds.has(subjectId)) {
+    // If we already did pick every subject, then just start over
+    if (pickedSubjectIds.size === subjectIds.length) {
+      pickedSubjectIds.clear();
+    }
+
+    pickedSubjectIds.add(subjectId);
+
+    return getRandomSubjectId();
+  }
+
+  pickedSubjectIds.add(subjectId);
+
+  return subjectId;
+};
+
 await Promise.all(
   documentsToCreate.map(async (documentJsonPath, index) => {
     const documentJson = await fs.readFile(documentJsonPath, {
       encoding: "utf8",
     });
     const document = JSON.parse(documentJson);
+    const subjectId = getRandomSubjectId();
 
     await db.insert(schema.documentsTable).values({
       isFinal: true,
       revisedAt: new Date(),
       createdAt: new Date(),
-      subjectId: subjectIds.at(getRandomNumber(subjectIds.length - 1)),
+      subjectId,
       ownerId: userIds.at(getRandomNumber(userIds.length - 1)),
       title: `Neznámý dokument (${index})`,
       ...document,

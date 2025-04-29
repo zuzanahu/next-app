@@ -1,6 +1,7 @@
 "use client";
 
 import { doLoginAction } from "@/server-actions/doLoginAction";
+import { Button, Group, PasswordInput, Text, TextInput } from "@mantine/core";
 import { useActionState } from "react";
 
 export type LoginFormState = {
@@ -15,31 +16,33 @@ export default function LoginPage() {
   const [state, action, pending] = useActionState(doLoginAction, undefined);
 
   return (
-    <form className="container text-xl mt-10" action={action}>
-      <div>
-        <label htmlFor="email" className="mr-5">
+    <form className="container text-xl mt-10 max-w-sm" action={action}>
+      <Group justify="space-between">
+        <Text component="label" htmlFor="email" size="sm" fw={500}>
           Email
-        </label>
-        <input id="email" name="email" type="email" placeholder="Email" />
-      </div>
-      {state?.errors?.email && (
-        <small className="text-red-600">{state.errors.email}</small>
-      )}
-      <div>
-        <label htmlFor="password" className="mr-5">
-          Password
-        </label>
-        <input id="password" name="password" type="password" />
-      </div>
-      {state?.errors?.password && (
-        <small className="text-red-600">{state.errors.password}</small>
-      )}
-      <button
-        className="mt-2 px-4 py-1 bg-green-600 focus:ring-2 rounded-md text-sm text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-        type="submit"
-      >
-        {pending ? "Submitting..." : "Sign In"}
-      </button>
+        </Text>
+      </Group>
+      <TextInput
+        placeholder="Váš email"
+        name="email"
+        id="email"
+        type="email"
+        error={state?.errors?.email}
+      />
+      <Group justify="space-between" className="mt-5">
+        <Text component="label" htmlFor="password" size="sm" fw={500}>
+          Vaše heslo
+        </Text>
+      </Group>
+      <PasswordInput
+        placeholder="Vaše heslo"
+        name="password"
+        id="password"
+        error={state?.errors?.password}
+      />
+      <Button loading={pending} type="submit" className="mt-5">
+        {pending ? "Přihlašuji..." : "Přihlásit se"}
+      </Button>
     </form>
   );
 }

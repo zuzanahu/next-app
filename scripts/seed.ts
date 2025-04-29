@@ -5,6 +5,7 @@ import { glob } from "glob";
 
 import { reset } from "drizzle-seed";
 import path from "path";
+import { hashPassword } from "@/utils/hashPassword";
 await reset(db, schema);
 
 function getRandomNumber(max: number) {
@@ -21,7 +22,7 @@ const [adminRole] = await db.insert(schema.userRoles).values({
 const [userRole] = await db.insert(schema.userRoles).values({
   name: "User",
   canCreateDocuments: true,
-  canDeleteDocuments: true,
+  canDeleteDocuments: false,
   canViewAdministration: false,
 });
 
@@ -54,7 +55,7 @@ await db.insert(schema.usersTable).values({
   name: "John",
   roleId: adminRole.insertId,
   email: "admin@gmail.com",
-  password: "test123",
+  password: await hashPassword("test123"),
 });
 
 console.log("New admin created!");
@@ -63,11 +64,12 @@ await db.insert(schema.usersTable).values({
   name: "Alice Nováková",
   roleId: userRole.insertId,
   email: "user@gmail.com",
-  password: "test321",
+  password: await hashPassword("test321"),
 });
 
 console.log("New user created!");
 
+// use glob package to find all documents with the .json extension
 const documentsToCreate = await glob("*.json", {
   cwd: path.join(process.cwd(), "scripts", "documents"),
   absolute: true,
@@ -95,44 +97,3 @@ await Promise.all(
 console.log("Documents created!");
 
 process.exit();
-
-// async function addSessions() {
-//   const user = await db.query.usersTable.findFirst({
-//     where: eq(usersTable.email, "test@gmail.com"),
-//   });
-//   if (user) {
-//     const session: Session = {
-//       //vyprsi 14:15
-//       expiresAt: new Date(Date.now() + 3600000 * 3),
-//       //id: 12
-//       userId: user.id,
-//       id: uuid(),
-//     };
-//     await db.insert(sessionsTable).values(session);
-//     console.log("New session created!");
-
-//     const sessions = await db.select().from(sessionsTable);
-//     console.log("Getting all sessions from the database: ", sessions);
-//   }
-// }
-
-// // Wrap the delete operation in a function
-// const deleteDbs = async () => {
-//   try {
-//     await db.delete(sessionsTable);
-//     console.log("sessions deleted!");
-//     await db.delete(usersTable);
-//     console.log("users deleted!");
-//   } catch (error) {
-//     console.error("Error deleting:", error);
-//   }
-// };
-
-//adds one user or adds it and deletes it right away, depends if the deleting is commented out or not
-//main();
-
-// deletes all rows in user table
-//deleteDbs();
-
-//insertUsersAndUpdate()
-//addSessions()

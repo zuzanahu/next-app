@@ -1,4 +1,4 @@
-import { SESSION_COOKIE_NAME } from "@/constans";
+import { SESSION_COOKIE_NAME } from "@/constants";
 import { db } from "@/db";
 import { sessionsTable } from "@/db/schema";
 import { and, eq, gt } from "drizzle-orm";

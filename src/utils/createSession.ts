@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { db } from "@/db";
 import { type Session, sessionsTable } from "@/db/schema";
 import { cookies } from "next/headers";
-import { SESSION_COOKIE_NAME } from "@/constans";
+import { SESSION_COOKIE_NAME } from "@/constants";
 
 export type CreateSessionOptions = {
   userId: number;

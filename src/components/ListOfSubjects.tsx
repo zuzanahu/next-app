@@ -5,8 +5,9 @@ import { CreateDocumentButton } from "./CreateDocumentButton";
 import Link from "next/link";
 import dayjs from "dayjs";
 import clsx from "clsx";
-import { DATE_FORMAT_NO_TIME } from "@/constans";
-
+import { DATE_FORMAT_NO_TIME } from "@/constants";
+import { IconTrash } from "@tabler/icons-react";
+import { IconClipboardCopy } from "@tabler/icons-react";
 import type { Document, Subject } from "@/db/schema";
 
 type SubjectWithDocuments = Subject & { documents: Document[] };

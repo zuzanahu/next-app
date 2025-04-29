@@ -1,16 +1,23 @@
 "use client";
 import Underline from "@tiptap/extension-underline";
 import { Editor as TiptapEditor, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { ListItem } from "@tiptap/extension-list-item";
 import { RichTextEditor } from "@mantine/tiptap";
-import { useState, useTransition } from "react";
-import { useDebounceCallback } from "@/hooks/useDebounceCallback";
+import { useTransition } from "react";
+import { Heading } from "@tiptap/extension-heading";
 import { Table as TiptapTable } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import clsx from "clsx";
 import { Tooltip } from "@mantine/core";
+import { Text } from "@tiptap/extension-text";
+import { Paragraph } from "@tiptap/extension-paragraph";
+import { Italic } from "@tiptap/extension-italic";
+import { Bold } from "@tiptap/extension-bold";
+import { Document } from "@tiptap/extension-document";
+import { BulletList } from "@tiptap/extension-bullet-list";
+
 import {
   IconTable,
   IconTrash,
@@ -25,27 +32,12 @@ import {
   IconLayoutGrid,
   IconLayoutColumns,
 } from "@tabler/icons-react";
+import { useAutoResetState } from "@/hooks/useAutoResetState";
+import { useDebouncedCallback } from "@mantine/hooks";
 
 type EditorProps = {
   initialContent: string;
   handleSave: (content: string) => Promise<void>;
-};
-
-const useAutoResetState = <T,>(options: {
-  timeout: number;
-  defaultValue?: T;
-}) => {
-  const [current, setCurrent] = useState<T | undefined>(options.defaultValue);
-
-  const handleSetCurrent: typeof setCurrent = (nextValueOrFunction) => {
-    setCurrent(nextValueOrFunction);
-
-    setTimeout(() => {
-      setCurrent(undefined);
-    }, options.timeout);
-  };
-
-  return [current, handleSetCurrent] as const;
 };
 
 export default function Editor({ initialContent, handleSave }: EditorProps) {
@@ -56,8 +48,8 @@ export default function Editor({ initialContent, handleSave }: EditorProps) {
   // Use transition to have a way to tell user that there is a save going on
   const [isUpdating, startUpdatingTransition] = useTransition();
 
-  // This can be called multiple times, however After 400ms delay it will execute
-  const debouncedSave = useDebounceCallback((valueToBeSaved: string) => {
+  // This can be called multiple times, however After 2000ms delay it will execute
+  const debouncedSave = useDebouncedCallback((valueToBeSaved: string) => {
     // Call save server function with transition (so that we can tell user about it)
     startUpdatingTransition(async () => {
       await handleSave(valueToBeSaved);
@@ -67,8 +59,17 @@ export default function Editor({ initialContent, handleSave }: EditorProps) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      Heading.configure({
+        levels: [2, 3],
+      }),
+      Text,
+      Paragraph,
+      BulletList,
+      ListItem,
       Underline,
+      Bold,
+      Italic,
+      Document,
       TiptapTable.configure({
         resizable: false,
       }),
@@ -111,33 +112,27 @@ export default function Editor({ initialContent, handleSave }: EditorProps) {
       >
         <RichTextEditor.Toolbar sticky stickyOffset={60}>
           <RichTextEditor.ControlsGroup>
+            <Tooltip label="H2" withArrow>
+              <RichTextEditor.H2 />
+            </Tooltip>
+            <Tooltip label="H2" withArrow>
+              <RichTextEditor.H3 />
+            </Tooltip>
             <Tooltip label="Tučně" withArrow>
               <RichTextEditor.Bold />
             </Tooltip>
             <Tooltip label="Kurzíva" withArrow>
               <RichTextEditor.Italic />
             </Tooltip>
-
             <Tooltip label="Podtržení" withArrow>
               <RichTextEditor.Underline />
             </Tooltip>
-
-            <Tooltip label="Přeškrtnutí" withArrow>
-              <RichTextEditor.Strikethrough />
-            </Tooltip>
-
             <Tooltip label="Vymazat formátování" withArrow>
               <RichTextEditor.ClearFormatting />
             </Tooltip>
-
-            <Tooltip label="Blok kódu" withArrow>
-              <RichTextEditor.Code />
-            </Tooltip>
-
             <TableMenu editor={editor}></TableMenu>
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
-
         <RichTextEditor.Content />
       </RichTextEditor>
     </>

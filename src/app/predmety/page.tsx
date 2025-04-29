@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { getLoggedInUserOrRedirect } from "@/utils/getLoggedInUserOrRedirect";
 import { ListOfSubjects } from "@/components/ListOfSubjects";
 import { FinalizedDocuments } from "@/components/FinalizedDocuments";
+import { PageHeader } from "@/components/PageHeader";
 
 export default async function HomePage() {
   const subjects = await db.query.subjectsTable.findMany({
@@ -10,15 +11,18 @@ export default async function HomePage() {
   const currentUser = await getLoggedInUserOrRedirect();
   const canCreateDocuments = currentUser.role?.canCreateDocuments;
   const canViewAdministration = currentUser.role?.canViewAdministration;
+  const canDeleteDocuments = currentUser.role?.canDeleteDocuments;
 
   return (
     <>
-      <div className="container">
-        <h1 className="mt-10 mb-5 text-2xl font-semibold">Předměty</h1>
-      </div>
-      {canViewAdministration ? <FinalizedDocuments></FinalizedDocuments> : null}
+      <PageHeader
+        title="Předměty"
+        afterTitleOutlet={canViewAdministration ? <FinalizedDocuments /> : null}
+      />
+
       <ListOfSubjects
         canCreateDocuments={canCreateDocuments}
+        canDeleteDocuments={canDeleteDocuments}
         subjects={subjects}
       ></ListOfSubjects>
     </>

@@ -1,6 +1,7 @@
 "use client";
 
 import { createSubjectAction } from "@/server-actions/createSubjectAction";
+import { Button, TextInput } from "@mantine/core";
 import { useActionState } from "react";
 
 export type CreateSubjectFormState = {
@@ -18,14 +19,15 @@ export function CreateSubjectForm() {
 
   return (
     <form action={action}>
-      <div>
-        <label htmlFor="name">Název předmětu</label>
-        <input id="name" name="name" type="text" placeholder="Český jazyk 1" />
-      </div>
-      {state?.errors?.name && <p>{state.errors.name}</p>}
-      <button type="submit">
+      <TextInput
+        name="name"
+        label="Název předmětu"
+        placeholder="Český jazyk 1"
+        error={state?.errors?.name}
+      />
+      <Button type="submit" size="xs" mt="xs" loading={pending}>
         {pending ? "Přidávání předmětu..." : "Přidat předmět"}
-      </button>
+      </Button>
     </form>
   );
 }

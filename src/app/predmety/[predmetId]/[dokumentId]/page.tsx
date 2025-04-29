@@ -1,6 +1,6 @@
 import Editor from "@/components/Editor";
 import { FinalizeDocumentButton } from "@/components/FinalizeDocumentButton";
-import { DATE_FORMAT_WITH_TIME } from "@/constans";
+import { DATE_FORMAT_WITH_TIME } from "@/constants";
 import { db } from "@/db";
 import { documentsTable } from "@/db/schema";
 import dayjs from "dayjs";

@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { type User, usersTable } from "@/db/schema";
 import { loginFormSchema } from "@/schemas/loginFormSchema";
 import { Messages } from "@/types/Messages";
+import { isPasswordValid } from "@/utils/isPasswordValid";
 import { createSession } from "@/utils/createSession";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -21,7 +22,13 @@ export async function doLoginAction(
         where: eq(usersTable.email, data.email),
       });
 
-      if (!user || user.password != data.password) {
+      if (
+        !user ||
+        !(await isPasswordValid({
+          password: data.password,
+          hashedPassword: user.password,
+        }))
+      ) {
         addIssue({
           path: ["email"],
           message: Messages.WRONG_CREDENTIALS,

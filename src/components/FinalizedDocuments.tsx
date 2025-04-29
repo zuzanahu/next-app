@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Modal } from "@mantine/core";
+import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { getAllFinalizedDocuments } from "@/server-functions/getAllFinalizedDocuments";
 import { jsonToLatex } from "@/utils/jsonToLatex";
@@ -30,10 +30,10 @@ export function FinalizedDocuments() {
     documents: { subject: string; content: string }[]
   ) => {
     // float so that the table stays at the place, that i have defined it at
+    // (no need for graphicx as there is no support for images yet)
     let latexContent = `
       \\documentclass{article}
       \\usepackage{graphicx}
-      \\usepackage{amsmath} % For math equations
       \\usepackage{tabularx}
       \\usepackage{multirow}
       \\usepackage{float}
@@ -52,7 +52,7 @@ export function FinalizedDocuments() {
       }
 
       latexContent += `
-        \\section*{${subject}}
+        \\section{${subject}}
         ${formattedContent}
       `;
     });
@@ -68,9 +68,9 @@ export function FinalizedDocuments() {
 
   return (
     <>
-      <button onClick={handleClick}>
+      <Button onClick={handleClick} size="xs">
         Získat všechny dokumenty s finální verzí
-      </button>
+      </Button>
       <Modal
         opened={opened}
         onClose={close}
@@ -85,7 +85,7 @@ export function FinalizedDocuments() {
             <ul>
               {missingSubjects.map((subject) => (
                 <li key={subject} className="list-disc ml-4">
-                  `Předmět ${subject} nemá dokument s finální verzí.`
+                  Předmět {subject} nemá dokument s finální verzí.
                 </li>
               ))}
             </ul>
@@ -99,8 +99,8 @@ export function FinalizedDocuments() {
             <ul>
               {missingContentSubjects.map((subject) => (
                 <li key={subject} className="list-disc ml-4">
-                  `Předmět ${subject} má finalizovaný dokument, ale neobsahuje
-                  žádný obsah.`
+                  Předmět subject má finalizovaný dokument, ale neobsahuje žádný
+                  obsah.
                 </li>
               ))}
             </ul>

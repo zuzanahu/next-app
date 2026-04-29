@@ -1,42 +1,79 @@
-# Web application for processing thematic plans
-This is an application developed for a <a href="https://theses.cz/id/k9gjgu/STAG102154.pdf?zpet=/vyhledavani/?search%3Dwebov%C3%A1%20aplikace%20pro%20tematick%C3%A9%20pl%C3%A1ny%26start%3D1"> Bachelor's thesis </a>. 
+# Thematic Plans Web App
 
-**The application as well as the thesis is in the Czech language.**  
+A full-stack web platform for managing structured thematic plans (educational documents) and subjects.
 
-The purpose of this system is easier management of thematic plans. I achieved this by enabling structured editing per subject instead of editing a single document with hundreds of pages. 
+> [!NOTE]
+> Built as a Bachelor’s thesis project
 
-Nevertheless, it is still possible to merge subjects into a single document and download it in Tex format (LaTex).
+## About the Project
 
-## Application showcase
+This application was created to modernize the management of thematic plans used at my high school.
+
+Instead of maintaining one large document with hundreds of pages, the system separates content into individual subjects with structured editing, easier maintenance, and clearer organization.
+
+The platform also supports merging subjects into a single exportable LaTeX (TeX) document.
+
+## Tech Stack
+- **Framework**: Next.js
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: MySQL
+- **ORM**: Drizzle ORM
+- **Libraries**: React, Tiptap, Zod
+- **Infrastructure**: Docker (for containerizing the database)
+- **Export Engine**: Custom Tiptap JSON to LaTeX (TeX) converter
+
+## Features
+### Admin Panel
+- Authentication with protected routes
+- User management and administration
+- Subject management (create, edit, delete)
+- Centralized dashboard for thematic plans
+- Structured editing per subject
+- Clean admin workflow for school staff
+
+### Document Management
+- Replace large monolithic files with modular subject content
+- Edit plans per subject independently
+- Merge multiple subjects into one final document
+- Download generated content in TeX format
+
+### Architecture Highlights
+- Structured data storage instead of static documents
+- Modular document generation pipeline
+- Designed for future expansion and easier maintenance
+
+## Application Showcase
 ### Login
-The sample user information to login can be found in the seed script in /scripts/seed.ts.
-<img width="991" height="425" alt="Pasted Graphic 13" src="https://github.com/user-attachments/assets/c99a9956-2caf-4ac0-9f96-bbe479934a6b" />
 
-### Main page with subjects
-<img width="999" height="759" alt="ZdraviZko, John!" src="https://github.com/user-attachments/assets/b25075bf-5096-4d75-b140-968ff30f4b82" />
+Demo credentials can be found in /scripts/seed.ts
 
-### Subject
-<img width="909" height="389" alt="Predmety" src="https://github.com/user-attachments/assets/749cb458-7962-418b-ac8a-69951647f674" />
+<img width="991" height="425" alt="Login screen" src="https://github.com/user-attachments/assets/c99a9956-2caf-4ac0-9f96-bbe479934a6b" />
 
-### Update document
-<img width="947" height="650" alt="Zdravicko, Johne" src="https://github.com/user-attachments/assets/1a1e24eb-3a50-4175-b1f7-08b661dc65ed" />
+### Main Dashboard
+<img width="999" height="759" alt="Dashboard" src="https://github.com/user-attachments/assets/b25075bf-5096-4d75-b140-968ff30f4b82" />
 
-### User administration
-<img width="1031" height="318" alt="Zdravi2ko, John!" src="https://github.com/user-attachments/assets/f27d3c2b-9f59-4b2a-8df4-1918a44a1379" />
+### Subject Detail
+<img width="909" height="389" alt="Subject detail" src="https://github.com/user-attachments/assets/749cb458-7962-418b-ac8a-69951647f674" />
 
-### Subject administration
-<img width="1027" height="832" alt="Piedmety" src="https://github.com/user-attachments/assets/6348116e-edb5-4069-965e-e07396b9bbc9" />
+### Document Editor
+<img width="947" height="650" alt="Editor" src="https://github.com/user-attachments/assets/1a1e24eb-3a50-4175-b1f7-08b661dc65ed" />
 
-### Downloading all documents in Tex format
-<img width="1026" height="820" alt="Zdravi2ko, John!" src="https://github.com/user-attachments/assets/9bbb7ff2-9ad1-4240-80ff-48ef674a7151" />
+### User Administration
+<img width="1031" height="318" alt="Users" src="https://github.com/user-attachments/assets/f27d3c2b-9f59-4b2a-8df4-1918a44a1379" />
 
-<img width="875" height="697" alt="setibst en (Tell)" src="https://github.com/user-attachments/assets/fefbbea7-c50d-41bc-b803-642f83ee8251" />
+### Subject Administration
+<img width="1027" height="832" alt="Subjects admin" src="https://github.com/user-attachments/assets/6348116e-edb5-4069-965e-e07396b9bbc9" />
 
-#### After converting the downloaded file to PDF in any program of choice 
-<img width="638" height="1026" alt="Pasted Graphic 20" src="https://github.com/user-attachments/assets/d0734d9f-5b63-4af8-8473-02b815e8a95b" />
+### Export to TeX
+<img width="1026" height="820" alt="Export" src="https://github.com/user-attachments/assets/9bbb7ff2-9ad1-4240-80ff-48ef674a7151" /> <img width="875" height="697" alt="TeX file" src="https://github.com/user-attachments/assets/fefbbea7-c50d-41bc-b803-642f83ee8251" />
+### The TeX content converted to PDF
+<img width="638" height="1026" alt="PDF result" src="https://github.com/user-attachments/assets/d0734d9f-5b63-4af8-8473-02b815e8a95b" />
 
-## How to run
-**Every step or command is to be done in project root if not said otherwise.**
+## Getting started
+> [!TIP]
+> Every step or command should be executed in project root
+
 - Install Node.js
 - Setup MySQL database via Docker (or other, in this example I use Docker)
   - Install Docker
@@ -50,3 +87,7 @@ The sample user information to login can be found in the seed script in /scripts
 - Run `npm run seed` to seed the database with data
 - Run `npm run start` and then open the application in your browser at an address `http://localhost:3000`
 
+## Roadmap
+- Drag-and-drop subject ordering
+- PDF export directly from the app
+- Logic to reuse old thematic plans for a new school year
